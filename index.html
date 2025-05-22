@@ -1,1 +1,343 @@
-<p>fffffffffff</p>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Aicy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #f6f8fa;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-container {
+      background: #fff;
+      border-radius: 99px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      width: 420px;
+      max-width: 90vw;
+      position: relative;
+    }
+
+    .engine-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0 12px 0 0;
+      display: flex;
+      align-items: center;
+      outline: none;
+      min-width: 68px;
+    }
+    .engine-logo {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background: #eee;
+      object-fit: contain;
+    }
+    .engine-name {
+      font-size: 15px;
+      color: #222;
+    }
+    .dropdown {
+      position: absolute;
+      top: 62px;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      padding: 8px 0;
+      animation: fadeIn .18s;
+    }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    .dropdown .engine-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 22px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .dropdown .engine-item:hover {
+      background: #f2f5fa;
+    }
+    .dropdown .divider {
+      height: 1px;
+      background: #eee;
+      margin: 6px 0;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      margin-left: 8px;
+      background: transparent;
+      padding: 6px 0;
+      color: #222;
+    }
+    .search-btn {
+      border: none;
+      background: #4f8cff;
+      color: #fff;
+      padding: 8px 22px;
+      border-radius: 99px;
+      margin-left: 14px;
+      font-size: 17px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .search-btn:hover {
+      background: #376dc8;
+    }
+    /* 弹窗样式 */
+    .modal-bg {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.25);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px 30px 22px 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+      min-width: 320px;
+      max-width: 96vw;
+    }
+    .modal label {
+      display: block;
+      margin: 12px 0 4px 0;
+      font-size: 15px;
+      color: #555;
+    }
+    .modal input {
+      width: 100%;
+      padding: 7px 9px;
+      font-size: 15px;
+      border: 1px solid #eee;
+      border-radius: 7px;
+      margin-bottom: 6px;
+      outline: none;
+    }
+    .modal-actions {
+      text-align: right;
+      margin-top: 12px;
+    }
+    .modal-actions button {
+      background: #4f8cff;
+      color: #fff;
+      border: none;
+      padding: 7px 20px;
+      border-radius: 8px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .modal-actions .cancel-btn {
+      background: #ccc;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="search-container">
+    <button class="engine-btn" id="engineBtn">
+      <img src="https://www.google.com/favicon.ico" class="engine-logo" id="engineLogo">
+      <span class="engine-name" id="engineName">Google</span>
+    </button>
+    <input id="searchInput" class="search-input" placeholder="输入搜索内容..." autofocus>
+    <button class="search-btn" id="searchBtn">搜索</button>
+    <div class="dropdown" id="dropdownMenu"></div>
+  </div>
+
+  <!-- 自定义搜索引擎弹窗 -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <form id="customEngineForm" autocomplete="off">
+        <label>引擎名称</label>
+        <input type="text" id="customEngineName" maxlength="20" required>
+        <label>图标链接</label>
+        <input type="url" id="customEngineLogo" placeholder="如 https://xxx.com/favicon.ico" required>
+        <label>搜索链接</label>
+        <input type="url" id="customEngineUrl" placeholder="用 %s 代表关键词" required>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
+          <button type="submit">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  // 默认搜索引擎
+  const engines = [
+    {
+      name: 'Google',
+      logo: 'https://www.google.com/favicon.ico',
+      url: 'https://www.google.com/search?q=%s'
+    },
+    {
+      name: 'Bing',
+      logo: 'https://www.bing.com/favicon.ico',
+      url: 'https://www.bing.com/search?q=%s'
+    },
+    {
+      name: '百度',
+      logo: 'https://www.baidu.com/favicon.ico',
+      url: 'https://www.baidu.com/s?wd=%s'
+    },
+    {
+      name: 'DuckDuckGo',
+      logo: 'https://duckduckgo.com/favicon.ico',
+      url: 'https://duckduckgo.com/?q=%s'
+    }
+  ];
+  
+  // 加载自定义搜索引擎
+  function loadCustomEngine() {
+    const custom = localStorage.getItem('customEngine');
+    if (custom) try {
+      return JSON.parse(custom);
+    } catch {}
+    return null;
+  }
+  function saveCustomEngine(data) {
+    localStorage.setItem('customEngine', JSON.stringify(data));
+  }
+
+  let customEngine = loadCustomEngine();
+  let allEngines = engines.slice();
+  if (customEngine) allEngines.push(customEngine);
+
+  let currentEngine = allEngines[0];
+
+  const engineBtn = document.getElementById('engineBtn');
+  const engineLogo = document.getElementById('engineLogo');
+  const engineName = document.getElementById('engineName');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  const modalBg = document.getElementById('modalBg');
+  const customEngineForm = document.getElementById('customEngineForm');
+
+  function updateEngine(engine) {
+    currentEngine = engine;
+    engineLogo.src = engine.logo;
+    engineName.textContent = engine.name;
+  }
+
+  function renderDropdown() {
+    dropdownMenu.innerHTML = '';
+    allEngines.forEach((engine, idx) => {
+      const item = document.createElement('div');
+      item.className = 'engine-item';
+      item.innerHTML = `<img src="${engine.logo}" class="engine-logo" style="width:20px;height:20px;">
+                        <span class="engine-name" style="margin-left:7px;">${engine.name}</span>`;
+      item.onclick = () => {
+        updateEngine(engine);
+        dropdownMenu.style.display = 'none';
+      };
+      dropdownMenu.appendChild(item);
+    });
+    // 分割线和自定义
+    dropdownMenu.appendChild(document.createElement('div')).className = 'divider';
+    const customItem = document.createElement('div');
+    customItem.className = 'engine-item';
+    customItem.innerHTML = `<svg width="20" height="20"><circle cx="10" cy="10" r="9" fill="#eee" /></svg>
+                            <span class="engine-name" style="margin-left:7px;">自定义搜索引擎</span>`;
+    customItem.onclick = () => {
+      openModal();
+      dropdownMenu.style.display = 'none';
+    };
+    dropdownMenu.appendChild(customItem);
+  }
+
+  engineBtn.onclick = function(e) {
+    renderDropdown();
+    dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
+    e.stopPropagation();
+  };
+
+  document.body.onclick = function(e) {
+    dropdownMenu.style.display = 'none';
+  };
+  dropdownMenu.onclick = e => e.stopPropagation();
+
+  function doSearch() {
+    let q = searchInput.value.trim();
+    if (!q) {
+      searchInput.focus();
+      return;
+    }
+    let url = currentEngine.url.replace('%s', encodeURIComponent(q));
+    window.open(url, '_blank');
+  }
+
+  searchBtn.onclick = doSearch;
+  searchInput.onkeydown = function(e) {
+    if (e.key === 'Enter') doSearch();
+  };
+
+  // 自定义引擎弹窗
+  function openModal() {
+    modalBg.style.display = 'flex';
+    // 如果已有自定义，预填
+    const ce = loadCustomEngine();
+    if (ce) {
+      document.getElementById('customEngineName').value = ce.name;
+      document.getElementById('customEngineLogo').value = ce.logo;
+      document.getElementById('customEngineUrl').value = ce.url;
+    } else {
+      customEngineForm.reset();
+    }
+  }
+  function closeModal() {
+    modalBg.style.display = 'none';
+  }
+  modalBg.onclick = function(e) {
+    if (e.target === modalBg) closeModal();
+  };
+
+  customEngineForm.onsubmit = function(e) {
+    e.preventDefault();
+    const name = document.getElementById('customEngineName').value.trim();
+    const logo = document.getElementById('customEngineLogo').value.trim();
+    const url = document.getElementById('customEngineUrl').value.trim();
+    if (!name || !logo || !url || !url.includes('%s')) {
+      alert('请填写完整，并确保搜索链接包含 %s');
+      return;
+    }
+    const ce = { name, logo, url };
+    saveCustomEngine(ce);
+    customEngine = ce;
+    allEngines = engines.slice();
+    allEngines.push(ce);
+    updateEngine(ce);
+    closeModal();
+  };
+
+  // 初始化
+  updateEngine(currentEngine);
+</script>
+</body>
+</html>
