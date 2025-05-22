@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Aicy</title>
+  <title>艾希莉娅 | Aicy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -27,8 +27,10 @@
       pointer-events: none;
     }
     #backgroundImage, #backgroundVideo {
-      width: 100vw; height: 100vh;
-      object-fit: contain;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;        /* 等比填满页面 */
+      object-position: top;     /* 顶部对齐 */
       display: none;
       background: #eee;
       user-select: none;
@@ -239,7 +241,7 @@
   <!-- 二级菜单 -->
   <div id="menuPopup">
     <div class="menu-item" id="menuPersonal">
-      <svg class="menu-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="#cde6fb"/><path d="M10 5.5A2.5 2.5 0 1 1 7.5 8 2.5 2.5 0 0 1 10 5.5zm0 4c2.33 0 4.5 1.17 4.5 2.5v1.5h-9V12c0-1.33 2.17-2.5 4.5-2.5z" fill="#4f8cff"/></svg>
+      <svg class="menu-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="#cde6fb"/><path d="M10 5.5A2.5 2.5 0 1 1 7.5 8 2.5 2.5 0 0 1 10 5.5zm0 4c2.33 0 4.5 1.17 4.5 2.5v1.5h-9V12c0-1.33 2[...]
       个性化
     </div>
     <div class="menu-divider"></div>
@@ -445,15 +447,10 @@
         bgImg.src = customUrl;
       }
     } else {
-      // 必应壁纸
-      fetch('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1')
-        .then(r => r.json())
-        .then(data => {
-          let url = 'https://www.bing.com' + data.images[0].url;
-          bgVideo.style.display = 'none';
-          bgImg.style.display = 'block';
-          bgImg.src = url;
-        });
+      // 使用 todaybing.com 提供的必应每日壁纸API
+      bgVideo.style.display = 'none';
+      bgImg.style.display = 'block';
+      bgImg.src = "https://www.todaybing.com/api";
     }
   }
   // 初始化背景
