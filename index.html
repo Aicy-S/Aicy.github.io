@@ -15,20 +15,39 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow-x: hidden;
     }
-
+    /* 底部背景区域 */
+    #backgroundContainer {
+      position: fixed;
+      left: 0; right: 0; bottom: 0; top: 0;
+      z-index: -1;
+      overflow: hidden;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+    }
+    #backgroundImage, #backgroundVideo {
+      width: 100vw; height: 100vh;
+      object-fit: contain;
+      display: none;
+      background: #eee;
+      user-select: none;
+    }
+    /* 搜索栏容器 */
     .search-container {
       background: #fff;
-      border-radius: 99px;
+      border-radius: var(--search-border-radius, 99px);
       box-shadow: 0 2px 16px rgba(0,0,0,.07);
       display: flex;
       align-items: center;
       padding: 12px 24px;
-      width: 420px;
+      width: var(--search-width, 420px);
+      height: var(--search-height, auto);
       max-width: 90vw;
       position: relative;
+      margin-top: 100px;
+      transition: width .2s, height .2s, border-radius .2s;
     }
-
     .engine-btn {
       border: none;
       background: transparent;
@@ -40,22 +59,21 @@
       min-width: 68px;
     }
     .engine-logo {
-      width: 22px;
-      height: 22px;
+      width: 22px; height: 22px;
       border-radius: 50%;
       margin-right: 8px;
       background: #eee;
       object-fit: contain;
+      display: var(--show-logo, inline);
     }
     .engine-name {
       font-size: 15px;
       color: #222;
+      display: var(--show-text, inline);
     }
     .dropdown {
       position: absolute;
-      top: 62px;
-      left: 0;
-      width: 100%;
+      top: 62px; left: 0; width: 100%;
       background: #fff;
       border-radius: 16px;
       box-shadow: 0 3px 16px rgba(0,0,0,0.06);
@@ -81,7 +99,6 @@
       background: #eee;
       margin: 6px 0;
     }
-
     .search-input {
       flex: 1;
       border: none;
@@ -103,11 +120,9 @@
       cursor: pointer;
       transition: background .15s;
     }
-    .search-btn:hover {
-      background: #376dc8;
-    }
+    .search-btn:hover { background: #376dc8; }
     /* 弹窗样式 */
-    .modal-bg {
+    .modal-bg, .popup-bg {
       position: fixed;
       top:0; left:0; right:0; bottom:0;
       background: rgba(0,0,0,0.25);
@@ -116,21 +131,20 @@
       align-items: center;
       justify-content: center;
     }
-    .modal {
+    .modal, .popup {
       background: #fff;
       border-radius: 18px;
       padding: 26px 30px 22px 30px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.13);
-      min-width: 320px;
-      max-width: 96vw;
+      min-width: 320px; max-width: 96vw;
     }
-    .modal label {
+    .modal label, .popup label {
       display: block;
       margin: 12px 0 4px 0;
       font-size: 15px;
       color: #555;
     }
-    .modal input {
+    .modal input, .popup input, .popup select {
       width: 100%;
       padding: 7px 9px;
       font-size: 15px;
@@ -138,12 +152,13 @@
       border-radius: 7px;
       margin-bottom: 6px;
       outline: none;
+      box-sizing: border-box;
     }
-    .modal-actions {
+    .modal-actions, .popup-actions {
       text-align: right;
       margin-top: 12px;
     }
-    .modal-actions button {
+    .modal-actions button, .popup-actions button {
       background: #4f8cff;
       color: #fff;
       border: none;
@@ -153,14 +168,88 @@
       cursor: pointer;
       font-size: 15px;
     }
-    .modal-actions .cancel-btn {
+    .modal-actions .cancel-btn, .popup-actions .cancel-btn {
       background: #ccc;
       color: #222;
+    }
+    /* 右上角按钮 */
+    #menuBtn {
+      position: fixed;
+      top: 32px; right: 32px;
+      width: 32px; height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      z-index: 1001;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    /* 菜单样式 */
+    #menuPopup {
+      position: fixed;
+      top: 72px; right: 32px;
+      width: 220px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px #0001;
+      z-index: 1002;
+      display: none;
+      flex-direction: column;
+      animation: fadeIn .18s;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 22px;
+      cursor: pointer;
+      font-size: 16px;
+      color: #222;
+      transition: background .15s;
+      gap: 10px;
+    }
+    .menu-item:hover { background: #f2f5fa; }
+    .menu-icon {
+      width: 20px; height: 20px; display: inline;
+    }
+    .menu-divider {
+      height: 1px;
+      background: #eee;
+      margin: 4px 0;
+      width: 90%;
+      align-self: center;
     }
   </style>
 </head>
 <body>
-  <div class="search-container">
+  <!-- 底部背景区域 -->
+  <div id="backgroundContainer">
+    <img id="backgroundImage" />
+    <video id="backgroundVideo" autoplay loop muted></video>
+  </div>
+
+  <!-- 右上角按钮 -->
+  <button id="menuBtn" title="设置">
+    <!-- 简单SVG齿轮icon -->
+    <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="#666" stroke-width="2" class="menu-icon">
+      <circle cx="16" cy="16" r="9" stroke="#666" stroke-width="2" fill="none"/>
+      <path d="M16 10v-3M16 25v-3M10 16h-3M25 16h-3M12.2 12.2l-2.1-2.1M21.9 21.9l-2.1-2.1M21.9 12.1l-2.1 2.1M12.2 21.8l-2.1 2.1" stroke="#666"/>
+      <circle cx="16" cy="16" r="2" fill="#666"/>
+    </svg>
+  </button>
+  <!-- 二级菜单 -->
+  <div id="menuPopup">
+    <div class="menu-item" id="menuPersonal">
+      <svg class="menu-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="#cde6fb"/><path d="M10 5.5A2.5 2.5 0 1 1 7.5 8 2.5 2.5 0 0 1 10 5.5zm0 4c2.33 0 4.5 1.17 4.5 2.5v1.5h-9V12c0-1.33 2.17-2.5 4.5-2.5z" fill="#4f8cff"/></svg>
+      个性化
+    </div>
+    <div class="menu-divider"></div>
+    <div class="menu-item" onclick="alert('更多功能开发中')">
+      <svg class="menu-icon" viewBox="0 0 20 20"><rect x="2" y="8" width="16" height="4" rx="2" fill="#eee"/></svg>
+      更多功能
+    </div>
+  </div>
+
+  <div class="search-container" id="searchContainer">
     <button class="engine-btn" id="engineBtn">
       <img src="https://www.google.com/favicon.ico" class="engine-logo" id="engineLogo">
       <span class="engine-name" id="engineName">Google</span>
@@ -187,50 +276,55 @@
       </form>
     </div>
   </div>
-
+  <!-- 个性化设置弹窗 -->
+  <div class="popup-bg" id="personalPopupBg">
+    <div class="popup">
+      <form id="personalForm" autocomplete="off">
+        <h3 style="margin:0 0 16px 0;color:#4f8cff;">个性化设置</h3>
+        <label>搜索框宽度(px)：</label>
+        <input type="number" id="searchWidth" min="200" max="800" value="420"/>
+        <label>搜索框高度(px)：</label>
+        <input type="number" id="searchHeight" min="30" max="120" value="auto"/>
+        <label>搜索框圆角(px)：</label>
+        <input type="number" id="searchRadius" min="0" max="99" value="99"/>
+        <label>显示Logo：</label>
+        <input type="checkbox" id="showLogo" checked>
+        <label>搜索框内容模式：</label>
+        <select id="searchMode">
+          <option value="text">仅文字</option>
+          <option value="icon">仅图标</option>
+        </select>
+        <label>背景设置：</label>
+        <select id="bgSourceType">
+          <option value="bing">必应壁纸</option>
+          <option value="custom">自定义</option>
+        </select>
+        <input type="file" id="customBgFile" style="display:none;" accept="image/png,image/jpeg,image/gif,video/mp4"/>
+        <div class="popup-actions">
+          <button type="button" class="cancel-btn" onclick="closePersonalPopup()">取消</button>
+          <button type="submit">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
 <script>
   // 默认搜索引擎
   const engines = [
-    {
-      name: 'Google',
-      logo: 'https://www.google.com/favicon.ico',
-      url: 'https://www.google.com/search?q=%s'
-    },
-    {
-      name: 'Bing',
-      logo: 'https://www.bing.com/favicon.ico',
-      url: 'https://www.bing.com/search?q=%s'
-    },
-    {
-      name: '百度',
-      logo: 'https://www.baidu.com/favicon.ico',
-      url: 'https://www.baidu.com/s?wd=%s'
-    },
-    {
-      name: 'DuckDuckGo',
-      logo: 'https://duckduckgo.com/favicon.ico',
-      url: 'https://duckduckgo.com/?q=%s'
-    }
+    { name: 'Google', logo: 'https://www.google.com/favicon.ico', url: 'https://www.google.com/search?q=%s' },
+    { name: 'Bing', logo: 'https://www.bing.com/favicon.ico', url: 'https://www.bing.com/search?q=%s' },
+    { name: '百度', logo: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=%s' },
+    { name: 'DuckDuckGo', logo: 'https://duckduckgo.com/favicon.ico', url: 'https://duckduckgo.com/?q=%s' }
   ];
-  
-  // 加载自定义搜索引擎
   function loadCustomEngine() {
     const custom = localStorage.getItem('customEngine');
-    if (custom) try {
-      return JSON.parse(custom);
-    } catch {}
+    if (custom) try { return JSON.parse(custom); } catch {}
     return null;
   }
-  function saveCustomEngine(data) {
-    localStorage.setItem('customEngine', JSON.stringify(data));
-  }
-
+  function saveCustomEngine(data) { localStorage.setItem('customEngine', JSON.stringify(data)); }
   let customEngine = loadCustomEngine();
   let allEngines = engines.slice();
   if (customEngine) allEngines.push(customEngine);
-
   let currentEngine = allEngines[0];
-
   const engineBtn = document.getElementById('engineBtn');
   const engineLogo = document.getElementById('engineLogo');
   const engineName = document.getElementById('engineName');
@@ -239,13 +333,11 @@
   const searchBtn = document.getElementById('searchBtn');
   const modalBg = document.getElementById('modalBg');
   const customEngineForm = document.getElementById('customEngineForm');
-
   function updateEngine(engine) {
     currentEngine = engine;
     engineLogo.src = engine.logo;
     engineName.textContent = engine.name;
   }
-
   function renderDropdown() {
     dropdownMenu.innerHTML = '';
     allEngines.forEach((engine, idx) => {
@@ -253,55 +345,34 @@
       item.className = 'engine-item';
       item.innerHTML = `<img src="${engine.logo}" class="engine-logo" style="width:20px;height:20px;">
                         <span class="engine-name" style="margin-left:7px;">${engine.name}</span>`;
-      item.onclick = () => {
-        updateEngine(engine);
-        dropdownMenu.style.display = 'none';
-      };
+      item.onclick = () => { updateEngine(engine); dropdownMenu.style.display = 'none'; };
       dropdownMenu.appendChild(item);
     });
-    // 分割线和自定义
     dropdownMenu.appendChild(document.createElement('div')).className = 'divider';
     const customItem = document.createElement('div');
     customItem.className = 'engine-item';
     customItem.innerHTML = `<svg width="20" height="20"><circle cx="10" cy="10" r="9" fill="#eee" /></svg>
                             <span class="engine-name" style="margin-left:7px;">自定义搜索引擎</span>`;
-    customItem.onclick = () => {
-      openModal();
-      dropdownMenu.style.display = 'none';
-    };
+    customItem.onclick = () => { openModal(); dropdownMenu.style.display = 'none'; };
     dropdownMenu.appendChild(customItem);
   }
-
   engineBtn.onclick = function(e) {
     renderDropdown();
     dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
     e.stopPropagation();
   };
-
-  document.body.onclick = function(e) {
-    dropdownMenu.style.display = 'none';
-  };
+  document.body.onclick = function(e) { dropdownMenu.style.display = 'none'; menuPopup.style.display = 'none'; };
   dropdownMenu.onclick = e => e.stopPropagation();
-
   function doSearch() {
     let q = searchInput.value.trim();
-    if (!q) {
-      searchInput.focus();
-      return;
-    }
+    if (!q) { searchInput.focus(); return; }
     let url = currentEngine.url.replace('%s', encodeURIComponent(q));
     window.open(url, '_blank');
   }
-
   searchBtn.onclick = doSearch;
-  searchInput.onkeydown = function(e) {
-    if (e.key === 'Enter') doSearch();
-  };
-
-  // 自定义引擎弹窗
+  searchInput.onkeydown = function(e) { if (e.key === 'Enter') doSearch(); };
   function openModal() {
     modalBg.style.display = 'flex';
-    // 如果已有自定义，预填
     const ce = loadCustomEngine();
     if (ce) {
       document.getElementById('customEngineName').value = ce.name;
@@ -311,13 +382,8 @@
       customEngineForm.reset();
     }
   }
-  function closeModal() {
-    modalBg.style.display = 'none';
-  }
-  modalBg.onclick = function(e) {
-    if (e.target === modalBg) closeModal();
-  };
-
+  function closeModal() { modalBg.style.display = 'none'; }
+  modalBg.onclick = function(e) { if (e.target === modalBg) closeModal(); };
   customEngineForm.onsubmit = function(e) {
     e.preventDefault();
     const name = document.getElementById('customEngineName').value.trim();
@@ -335,9 +401,135 @@
     updateEngine(ce);
     closeModal();
   };
-
-  // 初始化
   updateEngine(currentEngine);
+
+  // 右上角按钮及菜单
+  const menuBtn = document.getElementById('menuBtn');
+  const menuPopup = document.getElementById('menuPopup');
+  menuBtn.onclick = function(e) {
+    menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
+    e.stopPropagation();
+  };
+  menuPopup.onclick = e => e.stopPropagation();
+
+  // 个性化弹窗
+  const personalPopupBg = document.getElementById('personalPopupBg');
+  const personalForm = document.getElementById('personalForm');
+  document.getElementById('menuPersonal').onclick = function() {
+    // 读取当前设置
+    document.getElementById('searchWidth').value = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--search-width')) || 420;
+    document.getElementById('searchHeight').value = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--search-height')) || 40;
+    document.getElementById('searchRadius').value = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--search-border-radius')) || 99;
+    document.getElementById('showLogo').checked = getComputedStyle(document.documentElement).getPropertyValue('--show-logo') !== 'none';
+    document.getElementById('searchMode').value = (getComputedStyle(document.documentElement).getPropertyValue('--show-icon') === 'none') ? 'text' : 'icon';
+    document.getElementById('bgSourceType').value = localStorage.getItem('aicy_bg_source') || 'bing';
+    personalPopupBg.style.display = 'flex';
+    menuPopup.style.display = 'none';
+  };
+  function closePersonalPopup() { personalPopupBg.style.display = 'none'; }
+  personalPopupBg.onclick = function(e) { if (e.target === personalPopupBg) closePersonalPopup(); };
+
+  // 背景区域
+  const bgContainer = document.getElementById('backgroundContainer');
+  const bgImg = document.getElementById('backgroundImage');
+  const bgVideo = document.getElementById('backgroundVideo');
+  function setBackground(sourceType, customUrl) {
+    if (sourceType === 'custom' && customUrl) {
+      if (/\.(mp4)$/i.test(customUrl)) {
+        bgImg.style.display = 'none';
+        bgVideo.style.display = 'block';
+        bgVideo.src = customUrl;
+      } else {
+        bgVideo.style.display = 'none';
+        bgImg.style.display = 'block';
+        bgImg.src = customUrl;
+      }
+    } else {
+      // 必应壁纸
+      fetch('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1')
+        .then(r => r.json())
+        .then(data => {
+          let url = 'https://www.bing.com' + data.images[0].url;
+          bgVideo.style.display = 'none';
+          bgImg.style.display = 'block';
+          bgImg.src = url;
+        });
+    }
+  }
+  // 初始化背景
+  let bgSourceType = localStorage.getItem('aicy_bg_source') || 'bing';
+  let customBgUrl = localStorage.getItem('aicy_bg_custom_url') || '';
+  setBackground(bgSourceType, customBgUrl);
+
+  // 个性化表单提交
+  personalForm.onsubmit = function(e) {
+    e.preventDefault();
+    // 搜索框样式
+    let width = document.getElementById('searchWidth').value || 420;
+    let height = document.getElementById('searchHeight').value || 40;
+    let radius = document.getElementById('searchRadius').value || 99;
+    let showLogo = document.getElementById('showLogo').checked;
+    let mode = document.getElementById('searchMode').value;
+    let bgSourceType = document.getElementById('bgSourceType').value;
+    // 搜索框外观
+    document.documentElement.style.setProperty('--search-width', width + 'px');
+    document.documentElement.style.setProperty('--search-height', height + 'px');
+    document.documentElement.style.setProperty('--search-border-radius', radius + 'px');
+    document.documentElement.style.setProperty('--show-logo', showLogo ? 'inline' : 'none');
+    document.documentElement.style.setProperty('--show-text', mode === 'icon' ? 'none' : 'inline');
+    // 背景
+    localStorage.setItem('aicy_bg_source', bgSourceType);
+    if (bgSourceType === 'custom') {
+      let url = localStorage.getItem('aicy_bg_custom_url') || '';
+      setBackground('custom', url);
+    } else {
+      setBackground('bing');
+    }
+    closePersonalPopup();
+  };
+
+  // 搜索框内容互斥逻辑
+  document.getElementById('searchMode').onchange = function() {
+    let mode = this.value;
+    if (mode === 'icon') {
+      document.documentElement.style.setProperty('--show-text', 'none');
+      document.documentElement.style.setProperty('--show-logo', 'inline');
+    } else {
+      document.documentElement.style.setProperty('--show-text', 'inline');
+      document.documentElement.style.setProperty('--show-logo', 'none');
+    }
+  };
+
+  // 背景自定义上传
+  document.getElementById('bgSourceType').onchange = function() {
+    if (this.value === 'custom') {
+      document.getElementById('customBgFile').style.display = 'block';
+    } else {
+      document.getElementById('customBgFile').style.display = 'none';
+    }
+  };
+  document.getElementById('customBgFile').onchange = function(e) {
+    let file = e.target.files[0];
+    if (!file) return;
+    let url = URL.createObjectURL(file);
+    localStorage.setItem('aicy_bg_custom_url', url);
+    setBackground('custom', url);
+  };
+
+  // 恢复自定义设置
+  window.onload = function() {
+    // 恢复搜索框样式
+    let width = localStorage.getItem('aicy_search_width') || 420;
+    let height = localStorage.getItem('aicy_search_height') || 40;
+    let radius = localStorage.getItem('aicy_search_radius') || 99;
+    document.documentElement.style.setProperty('--search-width', width + 'px');
+    document.documentElement.style.setProperty('--search-height', height + 'px');
+    document.documentElement.style.setProperty('--search-border-radius', radius + 'px');
+    let showLogo = localStorage.getItem('aicy_show_logo');
+    if (showLogo !== null) document.documentElement.style.setProperty('--show-logo', showLogo === 'true' ? 'inline' : 'none');
+    let showText = localStorage.getItem('aicy_show_text');
+    if (showText !== null) document.documentElement.style.setProperty('--show-text', showText === 'true' ? 'inline' : 'none');
+  };
 </script>
 </body>
 </html>
