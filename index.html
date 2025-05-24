@@ -2,531 +2,318 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>艾希莉娅 | Aicy</title>
+  <title>我的起始页</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root {
+      --panel-bg: rgba(255,255,255,0.90);
+      --main-color: #4f8cff;
+    }
     body {
-      background: #f6f8fa;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background: #f6f8fa;
+      position: relative;
       overflow-x: hidden;
     }
-    /* 底部背景区域 */
-    #backgroundContainer {
+    #bgContainer {
       position: fixed;
-      left: 0; right: 0; bottom: 0; top: 0;
+      left: 0;top: 0;right: 0;bottom: 0;
+      width: 100vw; height: 100vh;
       z-index: -1;
       overflow: hidden;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
+      background: #eee;
     }
-    #backgroundImage, #backgroundVideo {
+    #bgImage, #bgVideo {
       width: 100vw;
       height: 100vh;
-      object-fit: cover;        /* 等比填满页面 */
-      object-position: top;     /* 顶部对齐 */
+      object-fit: cover;
       display: none;
-      background: #eee;
+      pointer-events: none;
       user-select: none;
     }
-    /* 搜索栏容器 */
-    .search-container {
-      background: #fff;
-      border-radius: var(--search-border-radius, 99px);
-      box-shadow: 0 2px 16px rgba(0,0,0,.07);
-      display: flex;
-      align-items: center;
-      padding: 12px 24px;
-      width: var(--search-width, 420px);
-      height: var(--search-height, auto);
-      max-width: 90vw;
-      position: relative;
-      margin-top: 100px;
-      transition: width .2s, height .2s, border-radius .2s;
-    }
-    .engine-btn {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      padding: 0 12px 0 0;
-      display: flex;
-      align-items: center;
-      outline: none;
-      min-width: 68px;
-    }
-    .engine-logo {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background: #eee;
-      object-fit: contain;
-      display: var(--show-logo, inline);
-    }
-    .engine-name {
-      font-size: 15px;
-      color: #222;
-      display: var(--show-text, inline);
-    }
-    .dropdown {
-      position: absolute;
-      top: 62px; left: 0; width: 100%;
-      background: #fff;
+    .panel {
+      background: var(--panel-bg);
       border-radius: 16px;
-      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
-      z-index: 10;
-      display: none;
-      flex-direction: column;
-      padding: 8px 0;
-      animation: fadeIn .18s;
-    }
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    .dropdown .engine-item {
+      box-shadow: 0 2px 16px rgba(0,0,0,.08);
+      margin: 24px auto 0 auto;
+      padding: 26px 28px;
+      max-width: 420px;
+      width: 96vw;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      padding: 8px 22px;
-      cursor: pointer;
-      transition: background .15s;
     }
-    .dropdown .engine-item:hover {
+    .weather {
+      width: 100%;
+      margin-bottom: 18px;
+      text-align: center;
+      font-size: 18px;
+      color: #222;
+    }
+    .search-box {
+      width: 100%;
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .engine-select {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 9px;
       background: #f2f5fa;
-    }
-    .dropdown .divider {
-      height: 1px;
-      background: #eee;
-      margin: 6px 0;
+      font-size: 15px;
+      margin-right: 8px;
+      outline: none;
     }
     .search-input {
       flex: 1;
       border: none;
+      padding: 8px 0;
+      font-size: 17px;
       outline: none;
-      font-size: 18px;
-      margin-left: 8px;
       background: transparent;
-      padding: 6px 0;
       color: #222;
     }
     .search-btn {
       border: none;
-      background: #4f8cff;
+      background: var(--main-color);
       color: #fff;
-      padding: 8px 22px;
       border-radius: 99px;
-      margin-left: 14px;
-      font-size: 17px;
-      cursor: pointer;
-      transition: background .15s;
-    }
-    .search-btn:hover { background: #376dc8; }
-    /* 弹窗样式 */
-    .modal-bg, .popup-bg {
-      position: fixed;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.25);
-      z-index: 999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal, .popup {
-      background: #fff;
-      border-radius: 18px;
-      padding: 26px 30px 22px 30px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.13);
-      min-width: 320px; max-width: 96vw;
-    }
-    .modal label, .popup label {
-      display: block;
-      margin: 12px 0 4px 0;
+      padding: 7px 18px;
       font-size: 15px;
-      color: #555;
-    }
-    .modal input, .popup input, .popup select {
-      width: 100%;
-      padding: 7px 9px;
-      font-size: 15px;
-      border: 1px solid #eee;
-      border-radius: 7px;
-      margin-bottom: 6px;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .modal-actions, .popup-actions {
-      text-align: right;
-      margin-top: 12px;
-    }
-    .modal-actions button, .popup-actions button {
-      background: #4f8cff;
-      color: #fff;
-      border: none;
-      padding: 7px 20px;
-      border-radius: 8px;
       margin-left: 10px;
       cursor: pointer;
-      font-size: 15px;
     }
-    .modal-actions .cancel-btn, .popup-actions .cancel-btn {
-      background: #ccc;
-      color: #222;
+    .bookmarks {
+      width: 100%;
+      margin-top: 15px;
     }
-    /* 右上角按钮 */
-    #menuBtn {
-      position: fixed;
-      top: 32px; right: 32px;
-      width: 32px; height: 32px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      z-index: 1001;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0;
+    .bookmark-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    /* 菜单样式 */
-    #menuPopup {
-      position: fixed;
-      top: 72px; right: 32px;
-      width: 220px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 6px 20px #0001;
-      z-index: 1002;
-      display: none;
-      flex-direction: column;
-      animation: fadeIn .18s;
-    }
-    .menu-item {
+    .bookmark {
+      background: #f2f5fa;
+      border-radius: 8px;
+      padding: 4px 12px;
       display: flex;
       align-items: center;
-      padding: 12px 22px;
-      cursor: pointer;
-      font-size: 16px;
-      color: #222;
+      color: #333;
+      text-decoration: none;
+      font-size: 15px;
       transition: background .15s;
-      gap: 10px;
     }
-    .menu-item:hover { background: #f2f5fa; }
-    .menu-icon {
-      width: 20px; height: 20px; display: inline;
+    .bookmark:hover {
+      background: #cbe3ff;
     }
-    .menu-divider {
-      height: 1px;
+    .add-bookmark-btn {
       background: #eee;
-      margin: 4px 0;
-      width: 90%;
-      align-self: center;
+      border: none;
+      border-radius: 8px;
+      padding: 4px 12px;
+      margin-left: 4px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .bg-tools {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+      align-items: center;
+    }
+    @media (max-width: 600px) {
+      .panel { padding: 16px 4vw; }
+      .search-box { flex-direction: column; }
+      .search-btn { margin-left: 0; margin-top: 8px;}
+      .engine-select { margin-bottom: 5px;}
     }
   </style>
 </head>
 <body>
-  <!-- 底部背景区域 -->
-  <div id="backgroundContainer">
-    <img id="backgroundImage" />
-    <video id="backgroundVideo" autoplay loop muted></video>
+  <div id="bgContainer">
+    <img id="bgImage" />
+    <video id="bgVideo" autoplay loop muted></video>
   </div>
-
-  <!-- 右上角按钮 -->
-  <button id="menuBtn" title="设置">
-    <!-- 简单SVG齿轮icon -->
-    <svg viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="#666" stroke-width="2" class="menu-icon">
-      <circle cx="16" cy="16" r="9" stroke="#666" stroke-width="2" fill="none"/>
-      <path d="M16 10v-3M16 25v-3M10 16h-3M25 16h-3M12.2 12.2l-2.1-2.1M21.9 21.9l-2.1-2.1M21.9 12.1l-2.1 2.1M12.2 21.8l-2.1 2.1" stroke="#666"/>
-      <circle cx="16" cy="16" r="2" fill="#666"/>
-    </svg>
-  </button>
-  <!-- 二级菜单 -->
-  <div id="menuPopup">
-    <div class="menu-item" id="menuPersonal">
-      <svg class="menu-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="#cde6fb"/><path d="M10 5.5A2.5 2.5 0 1 1 7.5 8 2.5 2.5 0 0 1 10 5.5zm0 4c2.33 0 4.5 1.17 4.5 2.5v1.5h-9V12c0-1.33 2[...]
-      个性化
+  <div class="panel">
+    <div class="weather" id="weatherBox">加载天气中...</div>
+    <form class="search-box" id="searchForm" autocomplete="off">
+      <select class="engine-select" id="engineSelect">
+        <option value="https://www.google.com/search?q=%s">Google</option>
+        <option value="https://www.bing.com/search?q=%s">Bing</option>
+        <option value="https://www.baidu.com/s?wd=%s">百度</option>
+        <option value="https://duckduckgo.com/?q=%s">DuckDuckGo</option>
+      </select>
+      <input class="search-input" id="searchInput" placeholder="搜索点什么吧..." autofocus>
+      <button class="search-btn" type="submit">搜索</button>
+    </form>
+    <div class="bookmarks">
+      <div style="font-weight:500;margin-bottom:8px;">书签</div>
+      <div class="bookmark-list" id="bookmarkList"></div>
+      <button class="add-bookmark-btn" onclick="openBookmarkDialog()">+ 添加书签</button>
     </div>
-    <div class="menu-divider"></div>
-    <div class="menu-item" onclick="alert('更多功能开发中')">
-      <svg class="menu-icon" viewBox="0 0 20 20"><rect x="2" y="8" width="16" height="4" rx="2" fill="#eee"/></svg>
-      更多功能
-    </div>
-  </div>
-
-  <div class="search-container" id="searchContainer">
-    <button class="engine-btn" id="engineBtn">
-      <img src="https://www.google.com/favicon.ico" class="engine-logo" id="engineLogo">
-      <span class="engine-name" id="engineName">Google</span>
-    </button>
-    <input id="searchInput" class="search-input" placeholder="输入搜索内容..." autofocus>
-    <button class="search-btn" id="searchBtn">搜索</button>
-    <div class="dropdown" id="dropdownMenu"></div>
-  </div>
-
-  <!-- 自定义搜索引擎弹窗 -->
-  <div class="modal-bg" id="modalBg">
-    <div class="modal">
-      <form id="customEngineForm" autocomplete="off">
-        <label>引擎名称</label>
-        <input type="text" id="customEngineName" maxlength="20" required>
-        <label>图标链接</label>
-        <input type="url" id="customEngineLogo" placeholder="如 https://xxx.com/favicon.ico" required>
-        <label>搜索链接</label>
-        <input type="url" id="customEngineUrl" placeholder="用 %s 代表关键词" required>
-        <div class="modal-actions">
-          <button type="button" class="cancel-btn" onclick="closeModal()">取消</button>
-          <button type="submit">保存</button>
-        </div>
-      </form>
+    <div class="bg-tools">
+      <span>背景：</span>
+      <select id="bgSource" onchange="switchBgSource()">
+        <option value="bing">必应壁纸</option>
+        <option value="custom-img">自定义图片</option>
+        <option value="custom-video">自定义视频</option>
+      </select>
+      <input type="file" id="bgFile" style="display:none;" accept="image/*,video/mp4"/>
     </div>
   </div>
-  <!-- 个性化设置弹窗 -->
-  <div class="popup-bg" id="personalPopupBg">
-    <div class="popup">
-      <form id="personalForm" autocomplete="off">
-        <h3 style="margin:0 0 16px 0;color:#4f8cff;">个性化设置</h3>
-        <label>搜索框宽度(px)：</label>
-        <input type="number" id="searchWidth" min="200" max="800" value="420"/>
-        <label>搜索框高度(px)：</label>
-        <input type="number" id="searchHeight" min="30" max="120" value="auto"/>
-        <label>搜索框圆角(px)：</label>
-        <input type="number" id="searchRadius" min="0" max="99" value="99"/>
-        <label>显示Logo：</label>
-        <input type="checkbox" id="showLogo" checked>
-        <label>搜索框内容模式：</label>
-        <select id="searchMode">
-          <option value="text">仅文字</option>
-          <option value="icon">仅图标</option>
-        </select>
-        <label>背景设置：</label>
-        <select id="bgSourceType">
-          <option value="bing">必应壁纸</option>
-          <option value="custom">自定义</option>
-        </select>
-        <input type="file" id="customBgFile" style="display:none;" accept="image/png,image/jpeg,image/gif,video/mp4"/>
-        <div class="popup-actions">
-          <button type="button" class="cancel-btn" onclick="closePersonalPopup()">取消</button>
-          <button type="submit">保存</button>
-        </div>
-      </form>
+  <!-- 添加书签弹窗 -->
+  <div id="bookmarkDialog" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.27);align-items:center;justify-content:center;z-index:100;">
+    <div style="background:#fff;padding:18px 22px;border-radius:10px;max-width:90vw;">
+      <div style="font-weight:500;">添加书签</div>
+      <input id="bmName" placeholder="名称" style="margin-top:10px;width:100%;padding:5px 8px;font-size:15px;">
+      <input id="bmUrl" placeholder="网址(需 https://)" style="margin-top:9px;width:100%;padding:5px 8px;font-size:15px;">
+      <div style="text-align:right;margin-top:12px;">
+        <button onclick="closeBookmarkDialog()" style="margin-right:10px;">取消</button>
+        <button onclick="addBookmark()">保存</button>
+      </div>
     </div>
   </div>
-<script>
-  // 默认搜索引擎
-  const engines = [
-    { name: 'Google', logo: 'https://www.google.com/favicon.ico', url: 'https://www.google.com/search?q=%s' },
-    { name: 'Bing', logo: 'https://www.bing.com/favicon.ico', url: 'https://www.bing.com/search?q=%s' },
-    { name: '百度', logo: 'https://www.baidu.com/favicon.ico', url: 'https://www.baidu.com/s?wd=%s' },
-    { name: 'DuckDuckGo', logo: 'https://duckduckgo.com/favicon.ico', url: 'https://duckduckgo.com/?q=%s' }
-  ];
-  function loadCustomEngine() {
-    const custom = localStorage.getItem('customEngine');
-    if (custom) try { return JSON.parse(custom); } catch {}
-    return null;
-  }
-  function saveCustomEngine(data) { localStorage.setItem('customEngine', JSON.stringify(data)); }
-  let customEngine = loadCustomEngine();
-  let allEngines = engines.slice();
-  if (customEngine) allEngines.push(customEngine);
-  let currentEngine = allEngines[0];
-  const engineBtn = document.getElementById('engineBtn');
-  const engineLogo = document.getElementById('engineLogo');
-  const engineName = document.getElementById('engineName');
-  const dropdownMenu = document.getElementById('dropdownMenu');
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-  const modalBg = document.getElementById('modalBg');
-  const customEngineForm = document.getElementById('customEngineForm');
-  function updateEngine(engine) {
-    currentEngine = engine;
-    engineLogo.src = engine.logo;
-    engineName.textContent = engine.name;
-  }
-  function renderDropdown() {
-    dropdownMenu.innerHTML = '';
-    allEngines.forEach((engine, idx) => {
-      const item = document.createElement('div');
-      item.className = 'engine-item';
-      item.innerHTML = `<img src="${engine.logo}" class="engine-logo" style="width:20px;height:20px;">
-                        <span class="engine-name" style="margin-left:7px;">${engine.name}</span>`;
-      item.onclick = () => { updateEngine(engine); dropdownMenu.style.display = 'none'; };
-      dropdownMenu.appendChild(item);
-    });
-    dropdownMenu.appendChild(document.createElement('div')).className = 'divider';
-    const customItem = document.createElement('div');
-    customItem.className = 'engine-item';
-    customItem.innerHTML = `<svg width="20" height="20"><circle cx="10" cy="10" r="9" fill="#eee" /></svg>
-                            <span class="engine-name" style="margin-left:7px;">自定义搜索引擎</span>`;
-    customItem.onclick = () => { openModal(); dropdownMenu.style.display = 'none'; };
-    dropdownMenu.appendChild(customItem);
-  }
-  engineBtn.onclick = function(e) {
-    renderDropdown();
-    dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
-    e.stopPropagation();
-  };
-  document.body.onclick = function(e) { dropdownMenu.style.display = 'none'; menuPopup.style.display = 'none'; };
-  dropdownMenu.onclick = e => e.stopPropagation();
-  function doSearch() {
-    let q = searchInput.value.trim();
-    if (!q) { searchInput.focus(); return; }
-    let url = currentEngine.url.replace('%s', encodeURIComponent(q));
-    window.open(url, '_blank');
-  }
-  searchBtn.onclick = doSearch;
-  searchInput.onkeydown = function(e) { if (e.key === 'Enter') doSearch(); };
-  function openModal() {
-    modalBg.style.display = 'flex';
-    const ce = loadCustomEngine();
-    if (ce) {
-      document.getElementById('customEngineName').value = ce.name;
-      document.getElementById('customEngineLogo').value = ce.logo;
-      document.getElementById('customEngineUrl').value = ce.url;
-    } else {
-      customEngineForm.reset();
-    }
-  }
-  function closeModal() { modalBg.style.display = 'none'; }
-  modalBg.onclick = function(e) { if (e.target === modalBg) closeModal(); };
-  customEngineForm.onsubmit = function(e) {
-    e.preventDefault();
-    const name = document.getElementById('customEngineName').value.trim();
-    const logo = document.getElementById('customEngineLogo').value.trim();
-    const url = document.getElementById('customEngineUrl').value.trim();
-    if (!name || !logo || !url || !url.includes('%s')) {
-      alert('请填写完整，并确保搜索链接包含 %s');
-      return;
-    }
-    const ce = { name, logo, url };
-    saveCustomEngine(ce);
-    customEngine = ce;
-    allEngines = engines.slice();
-    allEngines.push(ce);
-    updateEngine(ce);
-    closeModal();
-  };
-  updateEngine(currentEngine);
-
-  // 右上角按钮及菜单
-  const menuBtn = document.getElementById('menuBtn');
-  const menuPopup = document.getElementById('menuPopup');
-  menuBtn.onclick = function(e) {
-    menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
-    e.stopPropagation();
-  };
-  menuPopup.onclick = e => e.stopPropagation();
-
-  // 个性化弹窗
-  const personalPopupBg = document.getElementById('personalPopupBg');
-  const personalForm = document.getElementById('personalForm');
-  document.getElementById('menuPersonal').onclick = function() {
-    // 读取当前设置
-    document.getElementById('searchWidth').value = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--search-width')) || 420;
-    document.getElementById('searchHeight').value = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--search-height')) || 40;
-    document.getElementById('searchRadius').value = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--search-border-radius')) || 99;
-    document.getElementById('showLogo').checked = getComputedStyle(document.documentElement).getPropertyValue('--show-logo') !== 'none';
-    document.getElementById('searchMode').value = (getComputedStyle(document.documentElement).getPropertyValue('--show-icon') === 'none') ? 'text' : 'icon';
-    document.getElementById('bgSourceType').value = localStorage.getItem('aicy_bg_source') || 'bing';
-    personalPopupBg.style.display = 'flex';
-    menuPopup.style.display = 'none';
-  };
-  function closePersonalPopup() { personalPopupBg.style.display = 'none'; }
-  personalPopupBg.onclick = function(e) { if (e.target === personalPopupBg) closePersonalPopup(); };
-
-  // 背景区域
-  const bgContainer = document.getElementById('backgroundContainer');
-  const bgImg = document.getElementById('backgroundImage');
-  const bgVideo = document.getElementById('backgroundVideo');
-  function setBackground(sourceType, customUrl) {
-    if (sourceType === 'custom' && customUrl) {
-      if (/\.(mp4)$/i.test(customUrl)) {
-        bgImg.style.display = 'none';
-        bgVideo.style.display = 'block';
-        bgVideo.src = customUrl;
-      } else {
-        bgVideo.style.display = 'none';
-        bgImg.style.display = 'block';
-        bgImg.src = customUrl;
+  <script>
+    // 天气信息（OpenWeatherMap免费接口, 需填写自己的API KEY）
+    async function loadWeather() {
+      const weatherBox = document.getElementById('weatherBox');
+      try {
+        // 建议改为你所在城市, 或通过IP定位
+        let city = localStorage.getItem('my_weather_city') || 'Beijing';
+        let apiKey = '你的APIKEY'; // https://openweathermap.org/
+        let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=zh_cn&appid=${apiKey}`);
+        if (!res.ok) throw new Error('天气获取失败');
+        let data = await res.json();
+        let weather = data.weather[0].description;
+        let temp = Math.round(data.main.temp);
+        let name = data.name || city;
+        weatherBox.innerHTML = `<span style="font-size:22px;">${name}</span> ${weather} <span style="color:var(--main-color);font-weight:bold;font-size:22px;margin-left:8px;">${temp}°C</span>`;
+      } catch (e) {
+        weatherBox.textContent = '无法获取天气，请检查API KEY。';
       }
-    } else {
-      // 使用 todaybing.com 提供的必应每日壁纸API
-      bgVideo.style.display = 'none';
-      bgImg.style.display = 'block';
-      bgImg.src = "https://www.todaybing.com/api";
     }
-  }
-  // 初始化背景
-  let bgSourceType = localStorage.getItem('aicy_bg_source') || 'bing';
-  let customBgUrl = localStorage.getItem('aicy_bg_custom_url') || '';
-  setBackground(bgSourceType, customBgUrl);
+    loadWeather();
 
-  // 个性化表单提交
-  personalForm.onsubmit = function(e) {
-    e.preventDefault();
-    // 搜索框样式
-    let width = document.getElementById('searchWidth').value || 420;
-    let height = document.getElementById('searchHeight').value || 40;
-    let radius = document.getElementById('searchRadius').value || 99;
-    let showLogo = document.getElementById('showLogo').checked;
-    let mode = document.getElementById('searchMode').value;
-    let bgSourceType = document.getElementById('bgSourceType').value;
-    // 搜索框外观
-    document.documentElement.style.setProperty('--search-width', width + 'px');
-    document.documentElement.style.setProperty('--search-height', height + 'px');
-    document.documentElement.style.setProperty('--search-border-radius', radius + 'px');
-    document.documentElement.style.setProperty('--show-logo', showLogo ? 'inline' : 'none');
-    document.documentElement.style.setProperty('--show-text', mode === 'icon' ? 'none' : 'inline');
-    // 背景
-    localStorage.setItem('aicy_bg_source', bgSourceType);
-    if (bgSourceType === 'custom') {
-      let url = localStorage.getItem('aicy_bg_custom_url') || '';
-      setBackground('custom', url);
-    } else {
-      setBackground('bing');
+    // 搜索
+    document.getElementById('searchForm').onsubmit = function(e) {
+      e.preventDefault();
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) return;
+      const engineUrl = document.getElementById('engineSelect').value;
+      window.open(engineUrl.replace('%s', encodeURIComponent(q)), '_blank');
+    };
+
+    // 书签
+    function getBookmarks() {
+      try { return JSON.parse(localStorage.getItem('my_bookmarks')||'[]'); } catch { return []; }
     }
-    closePersonalPopup();
-  };
-
-  // 搜索框内容互斥逻辑
-  document.getElementById('searchMode').onchange = function() {
-    let mode = this.value;
-    if (mode === 'icon') {
-      document.documentElement.style.setProperty('--show-text', 'none');
-      document.documentElement.style.setProperty('--show-logo', 'inline');
-    } else {
-      document.documentElement.style.setProperty('--show-text', 'inline');
-      document.documentElement.style.setProperty('--show-logo', 'none');
+    function setBookmarks(arr) {
+      localStorage.setItem('my_bookmarks', JSON.stringify(arr));
+      renderBookmarks();
     }
-  };
-
-  // 背景自定义上传
-  document.getElementById('bgSourceType').onchange = function() {
-    if (this.value === 'custom') {
-      document.getElementById('customBgFile').style.display = 'block';
-    } else {
-      document.getElementById('customBgFile').style.display = 'none';
+    function renderBookmarks() {
+      const list = document.getElementById('bookmarkList');
+      list.innerHTML = '';
+      let arr = getBookmarks();
+      arr.forEach((bm,i) => {
+        let a = document.createElement('a');
+        a.className = 'bookmark';
+        a.href = bm.url;
+        a.target = '_blank';
+        a.textContent = bm.name;
+        a.title = bm.url;
+        // 删除按钮
+        let del = document.createElement('span');
+        del.textContent = ' ×';
+        del.style.cursor = 'pointer';
+        del.style.marginLeft = '4px';
+        del.style.color = '#aaa';
+        del.onclick = function(e){e.preventDefault();arr.splice(i,1);setBookmarks(arr);};
+        a.appendChild(del);
+        list.appendChild(a);
+      });
+      if (!arr.length) list.innerHTML = '<span style="color:#aaa;font-size:13px;">暂无书签</span>';
     }
-  };
-  document.getElementById('customBgFile').onchange = function(e) {
-    let file = e.target.files[0];
-    if (!file) return;
-    let url = URL.createObjectURL(file);
-    localStorage.setItem('aicy_bg_custom_url', url);
-    setBackground('custom', url);
-  };
+    renderBookmarks();
 
-  // 恢复自定义设置
-  window.onload = function() {
-    // 恢复搜索框样式
-    let width = localStorage.getItem('aicy_search_width') || 420;
-    let height = localStorage.getItem('aicy_search_height') || 40;
-    let radius = localStorage.getItem('aicy_search_radius') || 99;
-    document.documentElement.style.setProperty('--search-width', width + 'px');
-    document.documentElement.style.setProperty('--search-height', height + 'px');
-    document.documentElement.style.setProperty('--search-border-radius', radius + 'px');
-    let showLogo = localStorage.getItem('aicy_show_logo');
-    if (showLogo !== null) document.documentElement.style.setProperty('--show-logo', showLogo === 'true' ? 'inline' : 'none');
-    let showText = localStorage.getItem('aicy_show_text');
-    if (showText !== null) document.documentElement.style.setProperty('--show-text', showText === 'true' ? 'inline' : 'none');
-  };
-</script>
+    // 添加书签弹窗
+    function openBookmarkDialog() {
+      document.getElementById('bookmarkDialog').style.display = 'flex';
+      document.getElementById('bmName').value = '';
+      document.getElementById('bmUrl').value = '';
+    }
+    function closeBookmarkDialog() {
+      document.getElementById('bookmarkDialog').style.display = 'none';
+    }
+    function addBookmark() {
+      let name = document.getElementById('bmName').value.trim();
+      let url = document.getElementById('bmUrl').value.trim();
+      if(!name || !url || !/^https?:\/\//.test(url)) {
+        alert('请填写书签名称和正确的网址（以http/https开头）');
+        return;
+      }
+      let arr = getBookmarks();
+      arr.push({name,url});
+      setBookmarks(arr);
+      closeBookmarkDialog();
+    }
+    document.getElementById('bookmarkDialog').onclick = function(e) {
+      if(e.target === this) closeBookmarkDialog();
+    };
+
+    // 背景图/视频
+    function setBg(type, url) {
+      const img = document.getElementById('bgImage');
+      const vid = document.getElementById('bgVideo');
+      if(type === 'custom-img' && url) {
+        img.src = url; img.style.display = 'block'; vid.style.display='none';
+      } else if(type === 'custom-video' && url) {
+        vid.src = url; vid.style.display='block'; img.style.display = 'none';
+      } else { // 必应壁纸
+        img.src = 'https://www.todaybing.com/api'; img.style.display = 'block'; vid.style.display = 'none';
+      }
+    }
+    function switchBgSource() {
+      let type = document.getElementById('bgSource').value;
+      let url = localStorage.getItem('my_bg_url');
+      if(type === 'custom-img' || type === 'custom-video') {
+        document.getElementById('bgFile').style.display = 'inline';
+      } else {
+        document.getElementById('bgFile').style.display = 'none';
+        setBg('bing');
+      }
+      setBg(type, url);
+    }
+    document.getElementById('bgSource').onchange = switchBgSource;
+    document.getElementById('bgFile').onchange = function(e){
+      let file = e.target.files[0];
+      if(!file) return;
+      let url = URL.createObjectURL(file);
+      let type = document.getElementById('bgSource').value;
+      localStorage.setItem('my_bg_url', url);
+      setBg(type, url);
+    };
+    // 初始化背景
+    (() => {
+      let type = localStorage.getItem('my_bg_type') || 'bing';
+      document.getElementById('bgSource').value = type;
+      let url = localStorage.getItem('my_bg_url');
+      setBg(type, url);
+    })();
+
+    // 保存选择
+    document.getElementById('bgSource').onchange = function(){
+      let type = this.value;
+      localStorage.setItem('my_bg_type', type);
+      switchBgSource();
+    };
+  </script>
 </body>
 </html>
