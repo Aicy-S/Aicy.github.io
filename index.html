@@ -65,9 +65,52 @@
       color: #333;
       outline: none;
     }
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+    
+    #bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+      transition: filter 0.4s ease;
+    }
+    
+    .search-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      text-align: center;
+      margin-top: 20vh;
+    }
+    
+    #search-input {
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
   </style>
 </head>
 <body>
+  <!-- 背景视频 -->
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="https://example.com/video.mp4" type="video/mp4">
+    您的浏览器不支持视频标签。
+  </video>
+  
+  <!-- 搜索框 -->
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="搜索...">
+  </div>
   <div class="time" id="time"></div>
   <form class="search-box" id="searchForm" autocomplete="off">
     <select class="engine-select" id="engineSelect">
@@ -80,6 +123,16 @@
     <button class="search-btn" type="submit">搜索</button>
   </form>
   <script>
+    const searchInput = document.getElementById('search-input');
+    const bgVideo = document.getElementById('bg-video');
+    
+    searchInput.addEventListener('focus', () => {
+      bgVideo.style.filter = 'blur(8px)';
+    });
+    
+    searchInput.addEventListener('blur', () => {
+      bgVideo.style.filter = 'blur(0)';
+    });
     // 时间显示
     function updateTime() {
       const now = new Date();
