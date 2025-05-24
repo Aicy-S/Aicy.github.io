@@ -73,14 +73,14 @@
     
     #bg-video {
       position: fixed;
-      top: 0; left: 0;
-      min-width: 100vw;
-      min-height: 100vh;
-      width: auto;
-      height: auto;
-      z-index: -1;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw;
+      height: 100vh;
       object-fit: cover;
+      z-index: -1;
+      filter: none;
       transition: filter 0.4s ease;
+      pointer-events: none;
     }
     
     .search-container {
@@ -106,11 +106,6 @@
     <source src="//mikux.fun/miku-x.mp4" type="video/mp4">
     您的浏览器不支持视频标签。
   </video>
-  
-  <!-- 搜索框 -->
-  <div class="search-container">
-    <input type="text" id="search-input" placeholder="搜索...">
-  </div>
   <div class="time" id="time"></div>
   <form class="search-box" id="searchForm" autocomplete="off">
     <select class="engine-select" id="engineSelect">
@@ -124,11 +119,11 @@
     <button class="search-btn" type="submit">搜索</button>
   </form>
   <script>
-    const searchInput = document.getElementById('search-input');
+    const searchInput = document.getElementById('searchInput');
     const bgVideo = document.getElementById('bg-video');
     
     searchInput.addEventListener('focus', () => {
-      bgVideo.style.filter = 'blur(8px)';
+      bgVideo.style.filter = 'blur(20px)';
     });
     
     searchInput.addEventListener('blur', () => {
