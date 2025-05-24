@@ -4,110 +4,7 @@
   <meta charset="UTF-8">
   <title>艾希莉娅 | AICY START</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    .logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 28px;
-      font-weight: bold;
-      color: #333;
-      z-index: 999;
-    }
-    body {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: "Segoe UI", Arial, sans-serif;
-    }
-    .time {
-      font-size: 3em;
-      margin-bottom: 24px;
-      color: #333;
-      letter-spacing: 2px;
-      font-weight: bold;
-      text-shadow: 0 2px 8px #fff8;
-    }
-    .search-box {
-      display: flex;
-      background: #fff;
-      border-radius: 40px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-      padding: 12px 22px;
-      /* max-width: 90vw; */
-      /* width: 400px; */
-      align-items: center;
-    }
-    .search-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      /* font-size: 18px; */
-      padding: 8px 0;
-      /* background: transparent; */
-      /* color: #222; */
-    }
-    .search-btn {
-      background: #4f8cff;
-      color: #fff;
-      border: none;
-      border-radius: 99px;
-      /* padding: 8px 22px; */
-      /* font-size: 17px; */
-      /* margin-left: 12px; */
-      cursor: pointer;
-      transition: background .15s;
-    }
-    .search-btn:hover { background: #376dc8; }
-    .engine-select {
-      border: none;
-      /* background: #f2f5fa; */
-      /* border-radius: 10px; */
-      /* padding: 5px 10px; */
-      margin-right: 10px;
-      font-size: 15px;
-      color: #333;
-      outline: none;
-    }
-    body, html {
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-    }
-    
-    #bg-video {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
-      filter: none;
-      transition: filter 0.4s ease;
-      pointer-events: none;
-    }
-    
-    .search-container {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      text-align: center;
-      margin-top: 20vh;
-    }
-    
-    #search-input {
-      padding: 12px 24px;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-    }
-  </style>
+  <link rel="stylesheet" href="asset/h5/css/style.css"> 
 </head>
 <body>
   <div class="logo">SHOOTING STAR</div>
@@ -138,36 +35,6 @@
     <input class="search-input" id="searchInput" placeholder="搜索点什么吧..." autofocus>
     <button class="search-btn" type="submit">搜索</button>
   </form>
-  <script>
-    const searchInput = document.getElementById('searchInput');
-    const bgVideo = document.getElementById('bg-video');
-    
-    searchInput.addEventListener('focus', () => {
-      bgVideo.style.filter = 'blur(20px)';
-    });
-    
-    searchInput.addEventListener('blur', () => {
-      bgVideo.style.filter = 'blur(0)';
-    });
-    // 时间显示
-    function updateTime() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('time').textContent = `${h}:${m}:${s}`;
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    // 搜索
-    document.getElementById('searchForm').onsubmit = function(e) {
-      e.preventDefault();
-      const q = document.getElementById('searchInput').value.trim();
-      if (!q) return;
-      const engineUrl = document.getElementById('engineSelect').value;
-      window.open(engineUrl.replace('%s', encodeURIComponent(q)), '_blank');
-    }
-  </script>
+  <script src="/asset/h5/css/style.css"></script>
 </body>
 </html>
