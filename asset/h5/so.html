@@ -55,22 +55,27 @@
       background: #00adb5;
     }
     .news-cards {
-      margin: 28px 16px 0 16px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* 横向排列 */
       gap: 18px;
+      overflow-x: auto; /* 横向滚动 */
+      margin: 28px 16px 0 16px;
+      padding-bottom: 12px;
     }
     .news-card {
+      min-width: 180px;
       background: #ffd369;
       border-radius: 10px;
       height: 80px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 0 20px;
       color: #333;
       font-size: 16px;
       font-weight: bold;
+      flex-shrink: 0; /* 防止被压缩 */
     }
   </style>
 </head>
@@ -80,17 +85,36 @@
     <div class="dot"></div>
   </div>
   <div class="categories">
-    <button class="category-btn">国内</button>
-    <button class="category-btn">国际</button>
-    <button class="category-btn">日本</button>
-    <button class="category-btn">...</button>
+    <button class="category-btn" data-category="国内">国内</button>
+    <button class="category-btn" data-category="国际">国际</button>
+    <button class="category-btn" data-category="日本">日本</button>
+    <button class="category-btn" data-category="all">...</button>
   </div>
   <div class="news-cards">
-    <div class="news-card">推荐新闻 1</div>
-    <div class="news-card">推荐新闻 2</div>
-    <div class="news-card">推荐新闻 3</div>
-    <div class="news-card">推荐新闻 4</div>
-    <div class="news-card">推荐新闻 5</div>
+    <div class="news-card" data-category="国内">国内新闻1</div>
+    <div class="news-card" data-category="国际">国际新闻1</div>
+    <div class="news-card" data-category="日本">日本新闻1</div>
+    <div class="news-card" data-category="国内">国内新闻2</div>
+    <div class="news-card" data-category="日本">日本新闻2</div>
   </div>
 </body>
+  <script>
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  const newsCards = document.querySelectorAll('.news-card');
+
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-category');
+      newsCards.forEach(card => {
+        if (category === 'all') {
+          card.style.display = '';
+        } else if (card.getAttribute('data-category') === category) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
 </html>
