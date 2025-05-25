@@ -1,16 +1,49 @@
-<link rel="stylesheet" href="asset/h5/css/style.css">
-<div class="container">
-  <div class="left">
-    <img src="search.png" class="search-icon" alt="搜索">
-    <ul class="category-list">
-      <li>分类1</li>
-      <li>分类2</li>
-      <!-- 更多分类 -->
-    </ul>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分类搜索页</title>
+  <link rel="stylesheet" href="asset/h5/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="asset/h5/search.png" class="search-icon" alt="搜索">
+      <ul class="category-list">
+        <li>分类1</li>
+        <li>分类2</li>
+        <li>分类3</li>
+        <li>分类4</li>
+        <li>分类5</li>
+        <!-- 更多分类可继续添加 -->
+      </ul>
+    </div>
+    <div class="right">
+      <!-- 分类对应的图标 -->
+      <img src="asset/h5/icon1.png" alt="分类1图标">
+      <img src="asset/h5/icon2.png" alt="分类2图标">
+      <img src="asset/h5/icon3.png" alt="分类3图标">
+      <img src="asset/h5/icon4.png" alt="分类4图标">
+      <img src="asset/h5/icon5.png" alt="分类5图标">
+      <!-- 更多图标可继续添加 -->
+    </div>
   </div>
-  <div class="right">
-    <!-- 分类对应的图标 -->
-    <img src="icon1.png" alt="asset/pictures/so.png">
-    <!-- 更多图标 -->
-  </div>
-</div>
+
+  <footer style="text-align:center; margin-top: 30px; color: #888;">
+    &copy; 2025 Aicy-S. 版权所有.
+  </footer>
+  <script>
+    // 示例交互：点击左侧分类切换右侧图标高亮
+    const categories = document.querySelectorAll('.category-list li');
+    const icons = document.querySelectorAll('.right img');
+    categories.forEach((cat, idx) => {
+      cat.addEventListener('click', () => {
+        icons.forEach((icon, i) => {
+          icon.style.border = (i === idx) ? '2px solid #409EFF' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
