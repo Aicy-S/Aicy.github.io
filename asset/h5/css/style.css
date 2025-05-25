@@ -52,6 +52,9 @@
       padding: 8px 0;
       /* background: transparent; */
       /* color: #222; */
+      filter: blur(10px);
+      /* 可选：平滑过渡宽度变化 */
+      transition: width 0.2s;
     }
     .search-btn {
       background: #4f8cff;
