@@ -55,3 +55,26 @@ function adjustInputWidth() {
 input.addEventListener('input', adjustInputWidth);
 // 页面加载时初始化
 window.addEventListener('DOMContentLoaded', adjustInputWidth);
+
+const engineSelect = document.getElementById('engineSelect');
+
+function updateSelectWidth() {
+  // 创建临时span用于计算宽度
+  const tempSpan = document.createElement('span');
+  tempSpan.style.visibility = 'hidden';
+  tempSpan.style.position = 'absolute';
+  tempSpan.style.fontSize = window.getComputedStyle(engineSelect).fontSize;
+  tempSpan.style.fontFamily = window.getComputedStyle(engineSelect).fontFamily;
+  tempSpan.innerText = engineSelect.options[engineSelect.selectedIndex].text;
+  document.body.appendChild(tempSpan);
+  // 计算宽度，留点富余
+  let width = tempSpan.offsetWidth + 32;
+  if (width < 60) width = 60;
+  engineSelect.style.width = width + 'px';
+  document.body.removeChild(tempSpan);
+}
+
+// 初始化和变化时都设置宽度
+engineSelect.style.minWidth = '60px';
+updateSelectWidth();
+engineSelect.addEventListener('change', updateSelectWidth);
