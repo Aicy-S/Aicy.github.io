@@ -108,3 +108,44 @@
       border: none;
       outline: none;
     }
+.container {
+  display: flex;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #fff;
+  overflow: hidden;
+}
+
+.left {
+  width: 160px;
+  background: #f6f7fb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.search-icon {
+  width: 24px;
+  margin-bottom: 12px;
+}
+
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.category-list li {
+  padding: 12px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
