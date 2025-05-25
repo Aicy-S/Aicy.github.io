@@ -81,24 +81,24 @@
 </head>
 <body>
   <div class="search-bar">
-    <input type="text" placeholder="搜索新闻内容...">
-    <div class="dot"></div>
-  </div>
-  <div class="categories">
-    <button class="category-btn" data-category="国内">国内</button>
-    <button class="category-btn" data-category="国际">国际</button>
-    <button class="category-btn" data-category="日本">日本</button>
-    <button class="category-btn" data-category="all">...</button>
-  </div>
-  <div class="news-cards">
-    <div class="news-card" data-category="国内">国内新闻1</div>
-    <div class="news-card" data-category="国际">国际新闻1</div>
-    <div class="news-card" data-category="日本">日本新闻1</div>
-    <div class="news-card" data-category="国内">国内新闻2</div>
-    <div class="news-card" data-category="日本">日本新闻2</div>
-  </div>
-</body>
-  <script>
+  <input type="text" id="category-search" placeholder="搜索新闻分类（如：日本）...">
+  <div class="dot"></div>
+</div>
+<div class="categories">
+  <button class="category-btn" data-category="国内">国内</button>
+  <button class="category-btn" data-category="国际">国际</button>
+  <button class="category-btn" data-category="日本">日本</button>
+  <button class="category-btn" data-category="all">...</button>
+</div>
+<div class="news-cards">
+  <div class="news-card" data-category="国内">国内新闻1</div>
+  <div class="news-card" data-category="国际">国际新闻1</div>
+  <div class="news-card" data-category="日本">日本新闻1</div>
+  <div class="news-card" data-category="国内">国内新闻2</div>
+  <div class="news-card" data-category="日本">日本新闻2</div>
+</div>
+<script>
+  // 分类筛选功能（如之前实现）
   const categoryBtns = document.querySelectorAll('.category-btn');
   const newsCards = document.querySelectorAll('.news-card');
 
@@ -116,5 +116,34 @@
       });
     });
   });
+
+  // 搜索栏跳转分类
+  const searchInput = document.getElementById('category-search');
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      jumpToCategory();
+    }
+  });
+  searchInput.addEventListener('blur', function() {
+    // 可选：失焦时自动跳转
+    // jumpToCategory();
+  });
+
+  function jumpToCategory() {
+    const value = searchInput.value.trim();
+    if (!value) return;
+    // 查找匹配的分类按钮（忽略全角/半角/大小写）
+    let found = false;
+    categoryBtns.forEach(btn => {
+      if (btn.textContent.replace(/\s/g, '') === value.replace(/\s/g, '')) {
+        btn.click();
+        btn.focus(); // 可选：聚焦到按钮
+        found = true;
+      }
+    });
+    if (!found) {
+      alert('没有找到该分类');
+    }
+  }
 </script>
 </html>
