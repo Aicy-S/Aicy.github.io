@@ -2,48 +2,95 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>分类搜索页</title>
-  <link rel="stylesheet" href="asset/h5/css/style.css">
+  <title>简洁新闻APP界面</title>
+  <style>
+    body {
+      background: #222831;
+      margin: 0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #f5f6fa;
+      border-radius: 24px;
+      padding: 10px 16px;
+      margin: 24px 16px 16px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+    }
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 16px;
+      color: #222;
+      flex: 1;
+    }
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #32e6c9 0%, #22b6ea 100%);
+      margin-left: 12px;
+    }
+    .categories {
+      display: flex;
+      gap: 16px;
+      margin: 12px 16px;
+    }
+    .category-btn {
+      background: #393e46;
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 8px 20px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .category-btn:hover {
+      background: #00adb5;
+    }
+    .news-cards {
+      margin: 28px 16px 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .news-card {
+      background: #ffd369;
+      border-radius: 10px;
+      height: 80px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      color: #333;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="left">
-      <img src="asset/h5/search.png" class="search-icon" alt="搜索">
-      <ul class="category-list">
-        <li>分类1</li>
-        <li>分类2</li>
-        <li>分类3</li>
-        <li>分类4</li>
-        <li>分类5</li>
-        <!-- 更多分类可继续添加 -->
-      </ul>
-    </div>
-    <div class="right">
-      <!-- 分类对应的图标 -->
-      <img src="asset/h5/icon1.png" alt="分类1图标">
-      <img src="asset/h5/icon2.png" alt="分类2图标">
-      <img src="asset/h5/icon3.png" alt="分类3图标">
-      <img src="asset/h5/icon4.png" alt="分类4图标">
-      <img src="asset/h5/icon5.png" alt="分类5图标">
-      <!-- 更多图标可继续添加 -->
-    </div>
+  <div class="search-bar">
+    <input type="text" placeholder="搜索新闻内容...">
+    <div class="dot"></div>
   </div>
-
-  <footer style="text-align:center; margin-top: 30px; color: #888;">
-    &copy; 2025 Aicy-S. 版权所有.
-  </footer>
-  <script>
-    // 示例交互：点击左侧分类切换右侧图标高亮
-    const categories = document.querySelectorAll('.category-list li');
-    const icons = document.querySelectorAll('.right img');
-    categories.forEach((cat, idx) => {
-      cat.addEventListener('click', () => {
-        icons.forEach((icon, i) => {
-          icon.style.border = (i === idx) ? '2px solid #409EFF' : 'none';
-        });
-      });
-    });
-  </script>
+  <div class="categories">
+    <button class="category-btn">国内</button>
+    <button class="category-btn">国际</button>
+    <button class="category-btn">日本</button>
+    <button class="category-btn">...</button>
+  </div>
+  <div class="news-cards">
+    <div class="news-card">推荐新闻 1</div>
+    <div class="news-card">推荐新闻 2</div>
+    <div class="news-card">推荐新闻 3</div>
+    <div class="news-card">推荐新闻 4</div>
+    <div class="news-card">推荐新闻 5</div>
+  </div>
 </body>
 </html>
