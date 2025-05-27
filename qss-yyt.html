@@ -165,6 +165,17 @@
       background: #ffd966 !important;
       font-weight: bold;
     }
+    .group-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2c2c2c;
+      margin: 18px 0 8px 8px;
+      letter-spacing: 1px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 8px;
+      padding: 6px 16px;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
@@ -178,9 +189,25 @@
   <!-- 分类按钮栏，固定底部且带玻璃模糊 -->
   <div class="category-tabs glass-blur">
     <button class="category-btn glass-blur" data-category="all">ALL</button>
-    <button class="category-btn glass-blur" data-category="wangpiaopiao">王飘飘专区</button>
-    <button class="category-btn glass-blur" data-category="putonghua">普飘专区</button>
-    <button class="category-btn glass-blur" data-category="733">733专区</button>
+    
+    <div class="music-category-group" data-category="wangpiaopiao">
+      <div class="group-title">王飘飘专区</div>
+      <div class="music-grid music-category" data-category="wangpiaopiao">
+        <button class="category-btn glass-blur" data-category="wangpiaopiao">王飘飘专区</button>
+      </div>
+    </div>
+    <div class="music-category-group" data-category="putonghua" style="display:none">
+      <div class="group-title">普飘专区</div>
+        <div class="music-grid music-category" data-category="putonghua">
+          <button class="category-btn glass-blur" data-category="putonghua">普飘专区</button>
+        </div>
+      </div>
+    <div class="music-category-group" data-category="733" style="display:none">
+      <div class="group-title">733专区</div>
+        <div class="music-grid music-category" data-category="733">
+          <button class="category-btn glass-blur" data-category="733">733专区</button>
+        </div>
+      </div>
   </div>
   
   <div class="music-grid-container">
@@ -289,16 +316,16 @@
       btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-category');
         if (target === "all") {
-          // 显示全部分类
-          document.querySelectorAll('.music-category').forEach(grid => {
-            grid.style.display = '';
+          // 显示全部分组
+          document.querySelectorAll('.music-category-group').forEach(group => {
+            group.style.display = '';
           });
           // 修改top
           musicGridContainer.style.top = '40%';
         } else {
-          // 显示对应分类，隐藏其他
-          document.querySelectorAll('.music-category').forEach(grid => {
-            grid.style.display = (grid.getAttribute('data-category') === target) ? '' : 'none';
+          // 只显示对应分组
+          document.querySelectorAll('.music-category-group').forEach(group => {
+            group.style.display = (group.getAttribute('data-category') === target) ? '' : 'none';
           });
           // 还原top
           musicGridContainer.style.top = '64%';
