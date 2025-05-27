@@ -133,7 +133,26 @@
     .music-btn:active {
       background: #ffd;
     }
-
+    
+    .category-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .category-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: none;
+      background: #eee;
+      cursor: pointer;
+      font-family: 'Chillax', sans-serif;
+      transition: background 0.2s;
+    }
+    .category-btn.active {
+      background: #ffd966;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -143,8 +162,15 @@
     您的浏览器不支持视频播放。
   </video>
   <img id="bg-fallback" src="asset/pictures/default-bg.jpg" alt="默认背景" style="display:none;">
+
+  <div class="category-tabs">
+    <button class="category-btn" data-category="wangpiaopiao">王飘飘专区</button>
+    <button class="category-btn" data-category="putonghua">普通话类</button>
+    <button class="category-btn" data-category="733">733专区</button>
+  </div>
+  
   <div class="music-grid-container">
-    <div class="music-grid">
+    <div class="music-grid music-category" data-category="wangpiaopiao">
       <!-- 王飘飘专区 -->
       <button class="music-btn" data-audio="asset/music/啊（激动）.MP3">啊（激动）</button>
       <button class="music-btn" data-audio="asset/music/啊~.MP3">啊~</button>
@@ -174,12 +200,17 @@
       <button class="music-btn" data-audio="asset/music/噫.MP3">噫</button>
       <button class="music-btn" data-audio="asset/music/战术喝水.MP3">战术喝水</button>
       <button class="music-btn" data-audio="asset/music/长.MP3">长</button>
+
+    <div class="music-grid music-category" data-category="putonghua" style="display:none">
       <!-- 普通话类 -->
       <button class="music-btn" data-audio="asset/music/来了哈（普）.MP3">来了哈（普）</button>
       <button class="music-btn" data-audio="asset/music/高（普）.MP3">高（普）</button>
       <button class="music-btn" data-audio="asset/music/毛才高（普）.MP3">毛才高（普）</button>
       <button class="music-btn" data-audio="asset/music/彭浩然（普）.MP3">彭浩然（普）</button>
       <button class="music-btn" data-audio="asset/music/周子翔（普）.MP3">周子翔（普）</button>
+    </div>
+
+    <div class="music-grid music-category" data-category="733" style="display:none">
       <!-- 733专区 -->
       <button class="music-btn" data-audio="asset/music/毛.MP3">毛</button>
       <button class="music-btn" data-audio="asset/music/才.MP3">才</button>
@@ -197,6 +228,7 @@
       <button class="music-btn" data-audio="asset/music/子.MP3">子</button>
       <button class="music-btn" data-audio="asset/music/翔.MP3">翔</button>
       <button class="music-btn" data-audio="asset/music/周子翔.MP3">周子翔</button>
+    </div>
       
       <button class="music-btn" data-audio="asset/music/  .MP3">   </button>
       <button class="music-btn" data-audio="asset/music/  .MP3">   </button>
@@ -261,5 +293,21 @@
       bgFallback.style.display = 'block';
       bgVideo.style.display = 'none';
     });
+
+    // 分类切换功能
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-category');
+        // 显示对应分类，隐藏其他
+        document.querySelectorAll('.music-category').forEach(grid => {
+          grid.style.display = (grid.getAttribute('data-category') === target) ? '' : 'none';
+        });
+        // 高亮当前tab
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+    // 可选：默认高亮第一个tab
+    document.querySelector('.category-btn').classList.add('active');
 </script>
 </html>
