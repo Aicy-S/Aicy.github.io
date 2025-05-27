@@ -21,6 +21,7 @@
     body {
       height: 100vh;
       width: 100vw;
+      background-color: #aaaeb1;
       position: relative;
       font-family: 'Chillax', sans-serif !important;
     }
@@ -156,7 +157,7 @@
       font-family: 'Chillax', sans-serif;
       transition: background 0.2s;
       white-space: nowrap; /* 禁止分类按钮文字换行 */
-      font-size: 1rem;
+      /* font-size: 1rem; */
       color: #333;
     }
     .category-btn.active {
@@ -175,13 +176,14 @@
 
   <!-- 分类按钮栏，固定底部且带玻璃模糊 -->
   <div class="category-tabs glass-blur">
-    <button class="category-btn glass-blur" data-category="all">显示全部</button>
-    <button class="category-btn glass-blur" data-category="wangpiaopiao">王飘飘专区</button>
-    <button class="category-btn glass-blur" data-category="putonghua">普通话类</button>
-    <button class="category-btn glass-blur" data-category="733">733专区</button>
+    <button class="category-btn glass-blur" data-category="all">ALL</button>
+    <button class="category-btn glass-blur" data-category="wangpiaopiao">王飘飘</button>
+    <button class="category-btn glass-blur" data-category="putonghua">普飘</button>
+    <button class="category-btn glass-blur" data-category="733">733</button>
   </div>
   
   <div class="music-grid-container">
+    <div class="music-grid music-category" data-category="all">
     <div class="music-grid music-category" data-category="wangpiaopiao">
       <!-- 王飘飘专区内容... -->
       <button class="music-btn glass-blur" data-audio="asset/music/啊（激动）.MP3">啊（激动）</button>
@@ -241,7 +243,7 @@
       <button class="music-btn glass-blur" data-audio="asset/music/周子翔.MP3">周子翔</button>
     </div>
   </div>
-
+</div>
   <!-- 音频播放器（隐藏，用于播放） -->
   <audio id="audio-player"></audio>
   <!-- 左上角信息卡片 -->
