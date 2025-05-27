@@ -283,6 +283,8 @@
     });
 
     // 分类切换功能，支持“显示全部”
+    const musicGridContainer = document.querySelector('.music-grid-container');
+
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-category');
@@ -291,11 +293,15 @@
           document.querySelectorAll('.music-category').forEach(grid => {
             grid.style.display = '';
           });
+          // 修改top
+          musicGridContainer.style.top = '40%';
         } else {
           // 显示对应分类，隐藏其他
           document.querySelectorAll('.music-category').forEach(grid => {
             grid.style.display = (grid.getAttribute('data-category') === target) ? '' : 'none';
           });
+          // 还原top
+          musicGridContainer.style.top = '70%';
         }
         document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
