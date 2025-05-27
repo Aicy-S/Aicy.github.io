@@ -38,18 +38,19 @@
     }
     /* 左上角容器1：圆角+模糊效果 */
     .glass-container {
-      position: absolute;
+      position: fixed;   /* 关键改动 */
       top: 24px;
       left: 24px;
       background: rgba(255,255,255,0.15);
       border-radius: 14.2px;
       backdrop-filter: blur(20px);
-      /* box-shadow: 0 4px 24px rgba(0,0,0,0.2); */
-      /* padding: 19.2px 25.6px 19.2px 19.2px; */
       display: flex;
       align-items: center;
       gap: 16px;
-  }
+      z-index: 99; /* 保证在所有内容之上 */
+      /* box-shadow: 0 4px 24px rgba(0,0,0,0.2); */
+      /* padding: 19.2px 25.6px 19.2px 19.2px; */
+    }
 
     /* 容器2：圆角+白色边框，包裹头像 */
     .avatar-box {
@@ -83,6 +84,8 @@
     }
     .music-grid-container {
       position: absolute;
+      padding-top: 100px;   /* 留出顶部空间，避免遮挡logo */
+      padding-left: 24px;   /* 留出左侧空间 */
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -92,6 +95,19 @@
       padding: 8px;
       overflow-y: auto;
       margin-top: 80px;
+    }
+    @media (max-width: 600px) {
+      .glass-container {
+        top: 8px;
+        left: 8px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+      .music-grid-container {
+        padding-top: 70px;  /* 手机顶部空间稍微小一点 */
+        padding-left: 8px;
+        max-width: 100vw;
+      }
     }
     .music-grid-container::-webkit-scrollbar {
       width: 8px;
