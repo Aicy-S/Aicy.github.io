@@ -57,7 +57,6 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      /* 统一用glass-blur */
       background: rgba(255,255,255,0.15);
       border-radius: 14.2px;
       backdrop-filter: blur(20px);
@@ -157,8 +156,7 @@
       cursor: pointer;
       font-family: 'Chillax', sans-serif;
       transition: background 0.2s;
-      white-space: nowrap; /* 禁止分类按钮文字换行 */
-      /* font-size: 1rem; */
+      white-space: nowrap;
       color: #333;
     }
     .category-btn.active {
@@ -189,95 +187,85 @@
   <!-- 分类按钮栏，固定底部且带玻璃模糊 -->
   <div class="category-tabs glass-blur">
     <button class="category-btn glass-blur" data-category="all">ALL</button>
-    <div class="music-grid-container">
+    <button class="category-btn glass-blur" data-category="wangpiaopiao">王飘飘专区</button>
+    <button class="category-btn glass-blur" data-category="putonghua">普飘专区</button>
+    <button class="category-btn glass-blur" data-category="733">733专区</button>
+  </div>
+  
+  <!-- 音乐按钮分组区，标题和按钮一体化显示 -->
+  <div class="music-grid-container">
     <!-- 王飘飘专区 -->
     <div class="music-category-group" data-category="wangpiaopiao">
       <div class="group-title">王飘飘专区</div>
       <div class="music-grid music-category" data-category="wangpiaopiao">
-        <button class="category-btn glass-blur" data-category="wangpiaopiao">王飘飘专区</button>
+        <!-- 王飘飘专区内容... -->
+        <button class="music-btn glass-blur" data-audio="asset/music/嗨.MP3">嗨</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/啊（激动）.MP3">啊（激动）</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/啊~.MP3">啊~</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/哎.MP3">哎</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/哎呀.MP3">哎呀</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/呃~呃.MP3">呃~呃</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/诶嘿.MP3">诶嘿</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/嘬嘴.MP3">嘬嘴</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/哈气.MP3">哈气</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/呵.MP3">呵</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/得.MP3">得</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/好美.MP3">好美</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/好.MP3">好</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/的 .MP3">的 </button>
+        <button class="music-btn glass-blur" data-audio="asset/music/来.MP3">来</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/啦.MP3">啦</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/太美了.MP3">太美了</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/美.MP3">美</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/喵.MP3">喵</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/你.MP3">你</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/哥.MP3">哥</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/我的小宝贝.MP3">我的小宝贝</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/我来了.MP3">我来了</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/太.MP3">太</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/我.MP3">我</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/呀.MP3">呀</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/噫.MP3">噫</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/战术喝水.MP3">战术喝水</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/长.MP3">长</button>
       </div>
     </div>
     <!-- 普飘专区 -->
     <div class="music-category-group" data-category="putonghua" style="display:none">
       <div class="group-title">普飘专区</div>
       <div class="music-grid music-category" data-category="putonghua">
-        <button class="category-btn glass-blur" data-category="putonghua">普飘专区</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/来了哈（普）.MP3">来了哈（普）</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/高（普）.MP3">高（普）</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/毛才高（普）.MP3">毛才高（普）</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/彭浩然（普）.MP3">彭浩然（普）</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/周子翔（普）.MP3">周子翔（普）</button>
       </div>
     </div>
     <!-- 733专区 -->
     <div class="music-category-group" data-category="733" style="display:none">
       <div class="group-title">733专区</div>
       <div class="music-grid music-category" data-category="733">
-        <button class="category-btn glass-blur" data-category="733">733专区</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/毛.MP3">毛</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/才.MP3">才</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/高.MP3">高</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/毛才高.MP3">毛才高</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/汪.MP3">汪</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/训.MP3">训</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/国.MP3">国</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/汪训国.MP3">汪训国</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/彭.MP3">彭</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/浩.MP3">浩</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/然.MP3">然</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/彭浩然.MP3">彭浩然</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/周.MP3">周</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/子.MP3">子</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/翔.MP3">翔</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/周子翔.MP3">周子翔</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/殷.MP3">殷</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/杰.MP3">杰</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/殷杰.MP3">殷杰</button>
+        <button class="music-btn glass-blur" data-audio="asset/music/狂魔哥.MP3">狂魔哥</button>
       </div>
-    </div>
-  </div>
-  </div>
-
-  
-  <div class="music-grid-container">
-    <div class="music-grid music-category" data-category="wangpiaopiao">
-      <!-- 王飘飘专区内容... -->
-      <button class="music-btn glass-blur" data-audio="asset/music/嗨.MP3">嗨</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/啊（激动）.MP3">啊（激动）</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/啊~.MP3">啊~</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/哎.MP3">哎</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/哎呀.MP3">哎呀</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/呃~呃.MP3">呃~呃</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/诶嘿.MP3">诶嘿</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/嘬嘴.MP3">嘬嘴</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/哈气.MP3">哈气</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/呵.MP3">呵</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/得.MP3">得</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/好美.MP3">好美</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/好.MP3">好</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/的 .MP3">的 </button>
-      <button class="music-btn glass-blur" data-audio="asset/music/来.MP3">来</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/啦.MP3">啦</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/太美了.MP3">太美了</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/美.MP3">美</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/喵.MP3">喵</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/你.MP3">你</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/哥.MP3">哥</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/我的小宝贝.MP3">我的小宝贝</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/我来了.MP3">我来了</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/太.MP3">太</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/我.MP3">我</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/呀.MP3">呀</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/噫.MP3">噫</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/战术喝水.MP3">战术喝水</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/长.MP3">长</button>
-    </div>
-    <div class="music-grid music-category" data-category="putonghua" style="display:none">
-      <!-- 普通话类内容... -->
-      <button class="music-btn glass-blur" data-audio="asset/music/来了哈（普）.MP3">来了哈（普）</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/高（普）.MP3">高（普）</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/毛才高（普）.MP3">毛才高（普）</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/彭浩然（普）.MP3">彭浩然（普）</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/周子翔（普）.MP3">周子翔（普）</button>
-    </div>
-    <div class="music-grid music-category" data-category="733" style="display:none">
-      <!-- 733专区内容... -->
-      <button class="music-btn glass-blur" data-audio="asset/music/毛.MP3">毛</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/才.MP3">才</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/高.MP3">高</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/毛才高.MP3">毛才高</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/汪.MP3">汪</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/训.MP3">训</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/国.MP3">国</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/汪训国.MP3">汪训国</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/彭.MP3">彭</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/浩.MP3">浩</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/然.MP3">然</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/彭浩然.MP3">彭浩然</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/周.MP3">周</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/子.MP3">子</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/翔.MP3">翔</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/周子翔.MP3">周子翔</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/殷.MP3">殷</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/杰.MP3">杰</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/殷杰.MP3">殷杰</button>
-      <button class="music-btn glass-blur" data-audio="asset/music/狂魔哥.MP3">狂魔哥</button>
     </div>
   </div>
   <!-- 音频播放器（隐藏，用于播放） -->
