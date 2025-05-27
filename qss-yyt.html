@@ -160,8 +160,9 @@
 
   <!-- 分类按钮栏，已固定底部 -->
   <div class="category-tabs">
-    <button class="category-btn" data-category="wangpiaopiao">王飘飘专区</button>
-    <button class="category-btn" data-category="putonghua">普通话类</button>
+    <button class="category-btn" data-category="all">ALL</button>
+    <button class="category-btn" data-category="wangpiaopiao">王飘飘</button>
+    <button class="category-btn" data-category="putonghua">普飘</button>
     <button class="category-btn" data-category="733">733专区</button>
   </div>
   
@@ -264,9 +265,17 @@
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-category');
-        document.querySelectorAll('.music-category').forEach(grid => {
-          grid.style.display = (grid.getAttribute('data-category') === target) ? '' : 'none';
-        });
+        if (target === "all") {
+          // 显示全部分类
+          document.querySelectorAll('.music-category').forEach(grid => {
+            grid.style.display = '';
+          });
+        } else {
+          // 显示对应分类，隐藏其他
+          document.querySelectorAll('.music-category').forEach(grid => {
+            grid.style.display = (grid.getAttribute('data-category') === target) ? '' : 'none';
+          });
+        }
         document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
       });
